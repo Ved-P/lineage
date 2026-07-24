@@ -1,0 +1,13 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Permissions for the Lineage main window: native save/open dialogs and reading/writing .lng files anywhere the user picks.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-destroy",
+    "dialog:default",
+    "fs:read-all",
+    "fs:write-all"
+  ]
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lineage</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===================== START SCREEN ===================== -->
+  <section id="start-screen" class="screen">
+    <div class="start-card">
+      <h1>Lineage</h1>
+      <p class="subtitle">A small, pretty family tree builder.</p>
+      <div class="start-actions">
+        <button id="btn-new-family" class="btn btn-primary">New Family</button>
+        <button id="btn-load-savefile" class="btn btn-secondary">Load Savefile</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MAIN APP SCREEN ===================== -->
+  <section id="app-screen" class="screen hidden">
+    <header id="toolbar">
+      <div class="toolbar-left">
+        <span id="tree-title">Untitled Family</span>
+        <span id="dirty-indicator" class="hidden">&bull; unsaved</span>
+      </div>
+      <div class="toolbar-right">
+        <button id="btn-exit-pedigree" class="btn btn-small hidden">Exit Pedigree View</button>
+        <button id="btn-add-family" class="btn btn-small">+ Add Family</button>
+        <button id="btn-reorder-toggle" class="btn btn-small btn-toggle">Reorder Mode</button>
+        <div class="zoom-controls">
+          <button id="btn-zoom-out" class="btn btn-small" type="button">−</button>
+          <span id="zoom-level">100%</span>
+          <button id="btn-zoom-in" class="btn btn-small" type="button">+</button>
+        </div>
+        <button id="btn-print" class="btn btn-small">Print</button>
+        <button id="btn-save" class="btn btn-small">Save</button>
+        <button id="btn-close-tree" class="btn btn-small btn-ghost">Close</button>
+      </div>
+    </header>
+
+    <div id="canvas-viewport">
+      <svg id="tree-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </section>
+
+  <!-- ===================== PERSON DETAILS PANEL ===================== -->
+  <aside id="details-panel" class="panel hidden">
+    <button id="details-close" class="panel-close">&times;</button>
+    <h2 id="details-name"></h2>
+    <p id="details-alt-name" class="alt-name"></p>
+    <div class="panel-actions">
+      <button id="details-edit" class="btn btn-small">Edit Person</button>
+      <button id="details-add-family-as-parent" class="btn btn-small">Add Family (as parent)</button>
+      <button id="details-add-family-as-child" class="btn btn-small">Add Parents (as child)</button>
+      <button id="details-change-color" class="btn btn-small">Change Last Name Color</button>
+      <button id="details-toggle-pedigree" class="btn btn-small">Show Pedigree</button>
+    </div>
+  </aside>
+
+  <!-- ===================== NEW-FIRST-PERSON MODAL ===================== -->
+  <div id="modal-first-person" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Create the first person</h2>
+      <form id="form-first-person" class="person-form">
+        <label>Given names <input type="text" name="given_names" required /></label>
+        <label>Last name <input type="text" name="last_name" required /></label>
+        <label>Alternate given names <input type="text" name="alt_given_names" /></label>
+        <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== EDIT PERSON MODAL ===================== -->
+  <div id="modal-edit-person" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Edit person</h2>
+      <form id="form-edit-person" class="person-form">
+        <label>Given names <input type="text" name="given_names" required /></label>
+        <label>Last name <input type="text" name="last_name" required /></label>
+        <label>Alternate given names <input type="text" name="alt_given_names" /></label>
+        <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== ADD / EDIT FAMILY MODAL ===================== -->
+  <div id="modal-family" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <h2 id="family-modal-title">Add Family</h2>
+
+      <div id="family-step-anchor" class="family-step">
+        <h3>1. Anchor person</h3>
+        <p class="hint">Every new family must connect to someone already in the tree.</p>
+        <div class="search-box">
+          <input type="text" id="anchor-search" placeholder="Search existing people&hellip;" />
+          <div id="anchor-search-results" class="search-results"></div>
+        </div>
+        <div id="anchor-chosen" class="chosen-person hidden"></div>
+
+        <h3>2. Anchor's role in this family</h3>
+        <div class="role-options" id="anchor-role-options">
+          <label><input type="radio" name="anchor-role" value="parent1" /> Parent 1</label>
+          <label><input type="radio" name="anchor-role" value="parent2" /> Parent 2</label>
+          <label><input type="radio" name="anchor-role" value="child" /> Child</label>
+        </div>
+      </div>
+
+      <div id="family-step-slots" class="family-step hidden">
+        <h3>3. Fill the rest of the family</h3>
+        <div id="slot-parent1" class="family-slot">
+          <div class="slot-label">Parent 1</div>
+          <div class="slot-content"></div>
+        </div>
+        <div id="slot-parent2" class="family-slot">
+          <div class="slot-label">Parent 2</div>
+          <div class="slot-content"></div>
+        </div>
+        <div id="slot-children" class="family-slot">
+          <div class="slot-label">Children</div>
+          <div id="children-list"></div>
+          <button type="button" id="btn-add-child-slot" class="btn btn-small">+ Add Child</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="button" id="btn-confirm-family" class="btn btn-primary" disabled>Create Family</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Small reusable sub-modal for picking/creating a person to fill a family slot -->
+  <div id="modal-pick-person" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="pick-person-title">Choose Person</h2>
+      <div class="pick-tabs">
+        <button type="button" class="pick-tab active" data-tab="existing">Existing</button>
+        <button type="button" class="pick-tab" data-tab="new">New</button>
+      </div>
+      <div id="pick-existing" class="pick-panel">
+        <div class="search-box">
+          <input type="text" id="pick-search" placeholder="Search existing people&hellip;" />
+          <div id="pick-search-results" class="search-results"></div>
+        </div>
+      </div>
+      <div id="pick-new" class="pick-panel hidden">
+        <form id="form-pick-new-person" class="person-form">
+          <label>Given names <input type="text" name="given_names" required /></label>
+          <label>Last name <input type="text" name="last_name" required /></label>
+          <label>Alternate given names <input type="text" name="alt_given_names" /></label>
+          <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="button" id="btn-confirm-pick" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MANAGE FAMILY MODAL (click a bracket line) ===================== -->
+  <div id="modal-color" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="color-modal-title">Manage Family</h2>
+
+      <div id="manage-family-section">
+        <h3>Parents</h3>
+        <div id="manage-parent1" class="family-slot"></div>
+        <div id="manage-parent2" class="family-slot"></div>
+
+        <h3>Children</h3>
+        <div id="manage-children-list"></div>
+        <button type="button" id="btn-manage-add-child" class="btn btn-small">+ Add Child</button>
+      </div>
+
+      <h3 id="color-section-title">Bracket Line Color</h3>
+      <p id="color-section-hint" class="hint">Overrides the automatic color for this family's connecting lines.</p>
+      <div id="color-palette" class="color-palette"></div>
+      <button type="button" id="btn-color-reset" class="btn btn-small">Reset to automatic</button>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SAVE-BEFORE-CLOSE CONFIRM ===================== -->
+  <div id="modal-confirm-close" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Unsaved changes</h2>
+      <p>You have unsaved changes. Do you want to save before closing?</p>
+      <div class="modal-actions">
+        <button type="button" id="confirm-discard" class="btn btn-ghost">Discard</button>
+        <button type="button" id="confirm-cancel" class="btn btn-secondary">Cancel</button>
+        <button type="button" id="confirm-save" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
