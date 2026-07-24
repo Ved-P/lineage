@@ -1,9 +1,10 @@
-import { allGenerations, getRow, ensureLastNameColor } from "./model.js";
+import { allGenerations, getRow, ensureLastNameColor, lifeDates } from "./model.js";
 import { NEUTRAL_LINE_COLOR } from "./model.js";
 
 export const BOX_W = 160;
 export const BOX_H_BASE = 68;
 export const BOX_H_ALT = 68;
+export const LIFE_DATES_LINE_H = 16;
 export const COUPLE_GAP = 16;
 export const SIBLING_GAP = 36;
 export const ROW_BASE_GAP = 90;
@@ -12,7 +13,11 @@ export const TOP_MARGIN = 60;
 export const SIDE_MARGIN = 60;
 
 function boxHeight(person) {
-  return person.alt_given_names || person.alt_last_name ? BOX_H_ALT : BOX_H_BASE;
+  // The base height already fits a name plus an optional alternate name; the
+  // life-dates line, when present, needs a little extra room below them.
+  let height = person.alt_given_names || person.alt_last_name ? BOX_H_ALT : BOX_H_BASE;
+  if (lifeDates(person)) height += LIFE_DATES_LINE_H;
+  return height;
 }
 
 export function computeLayout(tree) {

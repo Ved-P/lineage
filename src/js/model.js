@@ -63,6 +63,8 @@ export function createPerson(tree, data, generation) {
     last_name: data.last_name?.trim() || "",
     alt_given_names: data.alt_given_names?.trim() || "",
     alt_last_name: data.alt_last_name?.trim() || "",
+    birth_date: data.birth_date?.trim() || "",
+    death_date: data.death_date?.trim() || "",
     generation,
     upward_family_id: null,
     downward_family_id: null,
@@ -86,6 +88,42 @@ export function fullName(p) {
 export function altFullName(p) {
   if (!p.alt_given_names && !p.alt_last_name) return "";
   return `${p.alt_given_names} ${p.alt_last_name}`.trim();
+}
+
+// ===================== Life dates =====================
+// Birth/death are stored as free-form strings so users can record whatever
+// precision they have ("1920", "1920-03-15", "c. 1900", ...). These helpers
+// derive display text and a best-effort lifespan from that free text.
+
+// Compact display of a person's life dates, using an en dash between birth
+// and death: "1920 – 1990", "b. 1920", "d. 1990", or "" when both are blank.
+export function lifeDates(p) {
+  const birth = (p.birth_date || "").trim();
+  const death = (p.death_date || "").trim();
+  if (birth && death) return `${birth} \u2013 ${death}`;
+  if (birth) return `b. ${birth}`;
+  if (death) return `d. ${death}`;
+  return "";
+}
+
+// Pulls the first four-digit year out of a free-form date string.
+function extractYear(text) {
+  const match = (text || "").match(/\b(\d{4})\b/);
+  return match ? Number(match[1]) : null;
+}
+
+// Best-effort lifespan in whole years, or null when it can't be determined.
+// Uses the death year when present, otherwise the current year (for people
+// still living). Implausible spans (negative or > 150 years) return null so
+// the UI can quietly omit them rather than showing garbage.
+export function lifespanYears(p) {
+  const birthYear = extractYear(p.birth_date);
+  if (birthYear === null) return null;
+  const deathYear = extractYear(p.death_date);
+  const endYear = deathYear === null ? new Date().getFullYear() : deathYear;
+  const years = endYear - birthYear;
+  if (years < 0 || years > 150) return null;
+  return years;
 }
 
 // ===================== Row helpers =====================

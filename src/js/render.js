@@ -1,5 +1,5 @@
 import { computeLayout } from "./layout.js";
-import { fullName, altFullName, moveBlockInRow } from "./model.js";
+import { fullName, altFullName, lifeDates, moveBlockInRow } from "./model.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -58,6 +58,7 @@ export function renderTree(tree, svgEl, handlers) {
     div.innerHTML = `
       <div class="full-name">${escapeHtml(fullName(box.person))}</div>
       ${altFullName(box.person) ? `<div class="alt-name">${escapeHtml(altFullName(box.person))}</div>` : ""}
+      ${lifeDates(box.person) ? `<div class="life-dates">${escapeHtml(lifeDates(box.person))}</div>` : ""}
     `;
     div.addEventListener("click", (e) => {
       e.stopPropagation();

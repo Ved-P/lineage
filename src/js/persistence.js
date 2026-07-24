@@ -23,7 +23,13 @@ export function deserializeTree(text) {
     dirty: false,
     filePath: null,
   };
-  for (const p of doc.persons || []) tree.persons[p.id] = p;
+  for (const p of doc.persons || []) {
+    // Backfill fields that may be absent in save files written before life
+    // dates existed, so the rest of the app can assume they're present.
+    p.birth_date = p.birth_date || "";
+    p.death_date = p.death_date || "";
+    tree.persons[p.id] = p;
+  }
   for (const f of doc.families || []) tree.families[f.id] = f;
   return tree;
 }

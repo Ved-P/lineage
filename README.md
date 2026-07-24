@@ -22,8 +22,10 @@ When you open Lineage, you can either:
 
 Every person in the tree is drawn as a colored box, grouped into horizontal rows by generation. People with the same last name share the same box color. Married couples are drawn side by side (Parent 1 on the left, Parent 2 on the right), connected to their children below using bracket lines.
 
-**Selecting a person:** click their box to open the details panel on the right. From there you can:
-- **Edit Person** — change their names.
+Each box shows a person's name and, when recorded, their life dates (for example `1920 – 1990`, or `b. 1920` / `d. 1990` when only one is known).
+
+**Selecting a person:** click their box to open the details panel on the right. The panel shows their life dates and, when both years can be read, an approximate age. From there you can:
+- **Edit Person** — change their names and birth/death dates.
 - **Add Family (as parent)** — start a new family with this person as a parent.
 - **Add Parents (as child)** — record this person's parents.
 - **Change Last Name Color** — pick a different color for everyone with this last name.
@@ -84,6 +86,14 @@ npm run tauri dev
 
 This launches the app with hot-reloading of the frontend.
 
+### Running the tests
+
+The pure logic in `src/js/model.js` and `src/js/persistence.js` is covered by tests using Node's built-in test runner:
+
+```bash
+npm test
+```
+
 ### Building a release installer locally
 
 ```bash
@@ -95,7 +105,7 @@ The installer (`.msi`/`.exe` on Windows) will be output under `src-tauri/target/
 ### Save file format (`.lng`)
 
 `.lng` files are UTF-8 JSON containing:
-- `persons` — every person's names and generation number
+- `persons` — every person's names, birth/death dates, and generation number
 - `families` — parent/child relationships and any manual line-color override
 - `generation_order` — the left-to-right ordering of people within each generation row
 - `last_name_colors` — the color assigned to each last name

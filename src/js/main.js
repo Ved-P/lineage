@@ -10,6 +10,8 @@ import {
   searchPersons,
   fullName,
   altFullName,
+  lifeDates,
+  lifespanYears,
   ensureLastNameColor,
   PALETTE,
 } from "./model.js";
@@ -76,6 +78,11 @@ function selectPerson(id) {
   const alt = altFullName(p);
   $("#details-alt-name").textContent = alt;
   $("#details-alt-name").classList.toggle("hidden", !alt);
+  const dates = lifeDates(p);
+  const years = lifespanYears(p);
+  const lifeText = dates && years !== null ? `${dates} (${years} yrs)` : dates;
+  $("#details-life").textContent = lifeText;
+  $("#details-life").classList.toggle("hidden", !lifeText);
   detailsPanel.classList.remove("hidden");
   render();
 }
@@ -196,6 +203,8 @@ $("#details-edit").addEventListener("click", () => {
   form.last_name.value = p.last_name;
   form.alt_given_names.value = p.alt_given_names;
   form.alt_last_name.value = p.alt_last_name;
+  form.birth_date.value = p.birth_date || "";
+  form.death_date.value = p.death_date || "";
   openModal("#modal-edit-person");
 });
 

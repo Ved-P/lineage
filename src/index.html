@@ -51,6 +51,7 @@
     <button id="details-close" class="panel-close">&times;</button>
     <h2 id="details-name"></h2>
     <p id="details-alt-name" class="alt-name"></p>
+    <p id="details-life" class="details-life hidden"></p>
     <div class="panel-actions">
       <button id="details-edit" class="btn btn-small">Edit Person</button>
       <button id="details-add-family-as-parent" class="btn btn-small">Add Family (as parent)</button>
@@ -69,6 +70,10 @@
         <label>Last name <input type="text" name="last_name" required /></label>
         <label>Alternate given names <input type="text" name="alt_given_names" /></label>
         <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+        <div class="form-row">
+          <label>Birth <input type="text" name="birth_date" placeholder="e.g. 1920" /></label>
+          <label>Death <input type="text" name="death_date" placeholder="e.g. 1990" /></label>
+        </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
           <button type="submit" class="btn btn-primary">Create</button>
@@ -86,6 +91,10 @@
         <label>Last name <input type="text" name="last_name" required /></label>
         <label>Alternate given names <input type="text" name="alt_given_names" /></label>
         <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+        <div class="form-row">
+          <label>Birth <input type="text" name="birth_date" placeholder="e.g. 1920" /></label>
+          <label>Death <input type="text" name="death_date" placeholder="e.g. 1990" /></label>
+        </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
           <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -160,6 +169,10 @@
           <label>Last name <input type="text" name="last_name" required /></label>
           <label>Alternate given names <input type="text" name="alt_given_names" /></label>
           <label>Alternate last name <input type="text" name="alt_last_name" /></label>
+          <div class="form-row">
+            <label>Birth <input type="text" name="birth_date" placeholder="e.g. 1920" /></label>
+            <label>Death <input type="text" name="death_date" placeholder="e.g. 1990" /></label>
+          </div>
         </form>
       </div>
       <div class="modal-actions">

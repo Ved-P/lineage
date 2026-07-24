@@ -2,8 +2,10 @@
   "name": "lineage",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test": "node --test"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
