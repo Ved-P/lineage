@@ -638,15 +638,22 @@ $("#canvas-viewport").addEventListener(
 $("#btn-print").addEventListener("click", () => window.print());
 
 const PRINT_PAGE_WIDTH_PX = 960; // ~10in usable width at 96dpi, after margins
+const PRINT_PAGE_HEIGHT_PX = 900; // ~9.4in usable height at 96dpi, after margins
 
 let zoomBeforePrint = null;
 window.addEventListener("beforeprint", () => {
   zoomBeforePrint = zoomLevel;
   const naturalWidth = svg.viewBox.baseVal.width;
+  const naturalHeight = svg.viewBox.baseVal.height;
   if (naturalWidth > 0) {
     zoomLevel = Math.min(zoomLevel, PRINT_PAGE_WIDTH_PX / naturalWidth);
   }
   applyZoom();
+
+  // Only vertically center if the whole tree fits on a single printed page
+  // at this zoom — otherwise centering would clip a multi-page tree's top.
+  const fitsOnOnePage = naturalHeight * zoomLevel <= PRINT_PAGE_HEIGHT_PX;
+  $("#canvas-viewport").classList.toggle("print-center", fitsOnOnePage);
 });
 window.addEventListener("afterprint", () => {
   if (zoomBeforePrint !== null) {
@@ -654,4 +661,5 @@ window.addEventListener("afterprint", () => {
     zoomBeforePrint = null;
     applyZoom();
   }
+  $("#canvas-viewport").classList.remove("print-center");
 });

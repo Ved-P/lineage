@@ -243,4 +243,10 @@ html, body {
     height: auto !important;
     position: static !important;
   }
+  #canvas-viewport.print-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
 }

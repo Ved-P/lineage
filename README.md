@@ -41,6 +41,8 @@ Every person in the tree is drawn as a colored box, grouped into horizontal rows
 
 **Printing / exporting to PDF:** click **Print / Export PDF** in the toolbar. This opens your system's native print dialog; choose **"Microsoft Print to PDF"** (or your OS's equivalent) as the destination to save a PDF instead of printing on paper. The tree is automatically scaled to fit the page width. Before printing, make sure **"Background graphics"** is enabled and **"Headers and footers"** is disabled in the print dialog's settings, so the tree's colors print correctly and no browser-added title/date is added to the page.
 
+Please note that features like multiple marriages and adoptions are either unavailable or untested. This is not an exhaustive list.
+
 ---
 
 ## For Developers: Building from Source
